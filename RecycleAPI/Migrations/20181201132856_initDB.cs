@@ -1,6 +1,4 @@
 ﻿using System;
-using GeoAPI.Geometries;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RecycleAPI.Migrations
@@ -37,9 +35,7 @@ namespace RecycleAPI.Migrations
                 name: "Recycles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Location = table.Column<IPoint>(nullable: true),
+                    Id = table.Column<string>(nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(nullable: false),
                     TypeId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false)

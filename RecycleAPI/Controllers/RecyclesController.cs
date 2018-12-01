@@ -52,10 +52,10 @@ namespace RecycleAPI.Controllers
 
         // GET api/recycles/1
         [HttpGet("{id}",Name = "GetRecycle")]
-        public ActionResult<RecycleFullViewModel> GetById(int id)
+        public ActionResult<RecycleFullViewModel> GetById(string id)
         {
             List<Models.Feature> recycle_query = (from recycle in _context.Recycles
-                                                  where recycle.TypeId.Equals(id)
+                                                  where recycle.Id.Equals(id)
                                                   join type in _context.Types
                                                   on recycle.TypeId equals type.Id
                                                   join status in _context.Statuses
