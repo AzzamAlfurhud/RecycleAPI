@@ -1,15 +1,13 @@
-﻿using GeoAPI.Geometries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace RecycleAPI.ViewModel
 {
     public class RecycleViewModel
     {
         
-        public Coordinate Coordinates { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public int SRID { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
 
         public TypeEnum TypeId { get; set; }
