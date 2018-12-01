@@ -1,7 +1,5 @@
-﻿using GeoAPI.Geometries;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using GeoAPI.Geometries;
 
 namespace RecycleAPI.Data.Entities
 {
@@ -21,5 +19,6 @@ namespace RecycleAPI.Data.Entities
         {
             Id = Guid.NewGuid().ToString();
         }
+
     }
 }

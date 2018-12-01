@@ -1,9 +1,10 @@
 ﻿using System;
+using GeoAPI.Geometries;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RecycleAPI.Migrations
 {
-    public partial class initDB : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,6 +37,7 @@ namespace RecycleAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    Location = table.Column<IPoint>(nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(nullable: false),
                     TypeId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false)

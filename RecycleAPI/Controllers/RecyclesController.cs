@@ -9,7 +9,7 @@ using RecycleAPI.ViewModel;
 
 namespace RecycleAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RecyclesController : ControllerBase
     {
@@ -24,23 +24,26 @@ namespace RecycleAPI.Controllers
         [HttpGet]
         public ActionResult<RecycleFullViewModel> GetAll()
         {
-            List<Models.Feature> recycle_query = (from recycle in _context.Recycles
-                                                        join type in _context.Types
-                                                        on recycle.TypeId equals type.Id
-                                                        join status in _context.Statuses
-                                                        on recycle.StatusId equals status.Id
-                                                        select new Models.Feature
-                                                        {                                                            
-                                                                Type = "Feature",
-                                                                Properties = new Models.Property(
-                                                                    type.Name,
-                                                                    status.Name),
-                                                                Geometry = new Models.MyGeometry(
-                                                                    recycle.Location.GeometryType,
-                                                                    recycle.Location.X,
-                                                                    recycle.Location.Y)                                                            
-                                                        })
-                                                        .ToList();
+            List<Models.Feature> recycle_query;
+
+            recycle_query = (from recycle in _context.Recycles
+                             join type in _context.Types
+                             on recycle.TypeId equals type.Id
+                             join status in _context.Statuses
+                             on recycle.StatusId equals status.Id
+                             select new Models.Feature
+                             {
+                                 Type = "Feature",
+                                 Properties = new Models.Property(
+                                         type.Name,
+                                         status.Name),
+                                 Geometry = new Models.MyGeometry(
+                                         recycle.Location.GeometryType,
+                                         recycle.Location.X,
+                                         recycle.Location.Y)
+                             })
+                         .ToList();
+
             RecycleFullViewModel recycleFullViewModel = new RecycleFullViewModel
             {
                 Type = "FeatureCollection",
@@ -51,42 +54,11 @@ namespace RecycleAPI.Controllers
         }
 
         // GET api/recycles/1
-        [HttpGet("{id}",Name = "GetRecycle")]
+        [HttpGet("{id}",Name = "getRecycle")]
         public ActionResult<RecycleFullViewModel> GetById(string id)
         {
             List<Models.Feature> recycle_query = (from recycle in _context.Recycles
-                                                  where recycle.Id.Equals(id)
-                                                  join type in _context.Types
-                                                  on recycle.TypeId equals type.Id
-                                                  join status in _context.Statuses
-                                                  on recycle.StatusId equals status.Id
-                                                  select new Models.Feature
-                                                  {
-                                                      Type = "Feature",
-                                                      Properties = new Models.Property(
-                                                              type.Name,
-                                                              status.Name),
-                                                      Geometry = new Models.MyGeometry(
-                                                              recycle.Location.GeometryType,
-                                                              recycle.Location.X,
-                                                              recycle.Location.Y)
-                                                  })
-                                                        .ToList();
-            RecycleFullViewModel recycleFullViewModel = new RecycleFullViewModel
-            {
-                Type = "FeatureCollection",
-                Features = recycle_query
-            };
-
-            return recycleFullViewModel;
-        }
-        
-        // GET api/recycles/1
-        [HttpGet("{typeId}")]
-        public ActionResult<RecycleFullViewModel> GetByType(TypeEnum typeId)
-        {
-            List<Models.Feature> recycle_query = (from recycle in _context.Recycles
-                                                  where recycle.TypeId.Equals(typeId)
+                                                  where recycle.Id.Equals(id.Trim())
                                                   join type in _context.Types
                                                   on recycle.TypeId equals type.Id
                                                   join status in _context.Statuses
@@ -112,42 +84,73 @@ namespace RecycleAPI.Controllers
             return recycleFullViewModel;
         }
 
-        // GET api/recycles/1
-        [HttpGet("{statusId}")]
-        public ActionResult<RecycleFullViewModel> GetByStatus(StatusEnum statusId)
-        {
-            List<Models.Feature> recycle_query = (from recycle in _context.Recycles
-                                                  where recycle.StatusId.Equals(statusId)
-                                                  join type in _context.Types
-                                                  on recycle.TypeId equals type.Id
-                                                  join status in _context.Statuses
-                                                  on recycle.StatusId equals status.Id
-                                                  select new Models.Feature
-                                                  {
-                                                      Type = "Feature",
-                                                      Properties = new Models.Property(
-                                                              type.Name,
-                                                              status.Name),
-                                                      Geometry = new Models.MyGeometry(
-                                                              recycle.Location.GeometryType,
-                                                              recycle.Location.X,
-                                                              recycle.Location.Y)
-                                                  })
-                                                        .ToList();
-            RecycleFullViewModel recycleFullViewModel = new RecycleFullViewModel
-            {
-                Type = "FeatureCollection",
-                Features = recycle_query
-            };
+        //// GET api/recycles/1
+        //[HttpGet("{typeId}")]
+        //public ActionResult<RecycleFullViewModel> GetByType(TypeEnum typeId)
+        //{
+        //    List<Models.Feature> recycle_query = (from recycle in _context.Recycles
+        //                                          where recycle.TypeId.Equals(typeId)
+        //                                          join type in _context.Types
+        //                                          on recycle.TypeId equals type.Id
+        //                                          join status in _context.Statuses
+        //                                          on recycle.StatusId equals status.Id
+        //                                          select new Models.Feature
+        //                                          {
+        //                                              Type = "Feature",
+        //                                              Properties = new Models.Property(
+        //                                                      type.Name,
+        //                                                      status.Name),
+        //                                              Geometry = new Models.MyGeometry(
+        //                                                      recycle.Location.GeometryType,
+        //                                                      recycle.Location.X,
+        //                                                      recycle.Location.Y)
+        //                                          })
+        //                                                .ToList();
+        //    RecycleFullViewModel recycleFullViewModel = new RecycleFullViewModel
+        //    {
+        //        Type = "FeatureCollection",
+        //        Features = recycle_query
+        //    };
 
-            return recycleFullViewModel;
-        }
+        //    return recycleFullViewModel;
+        //}
+
+        //// GET api/recycles/1
+        //[HttpGet("{statusId}")]
+        //public ActionResult<RecycleFullViewModel> GetByStatus(StatusEnum statusId)
+        //{
+        //    List<Models.Feature> recycle_query = (from recycle in _context.Recycles
+        //                                          where recycle.StatusId.Equals(statusId)
+        //                                          join type in _context.Types
+        //                                          on recycle.TypeId equals type.Id
+        //                                          join status in _context.Statuses
+        //                                          on recycle.StatusId equals status.Id
+        //                                          select new Models.Feature
+        //                                          {
+        //                                              Type = "Feature",
+        //                                              Properties = new Models.Property(
+        //                                                      type.Name,
+        //                                                      status.Name),
+        //                                              Geometry = new Models.MyGeometry(
+        //                                                      recycle.Location.GeometryType,
+        //                                                      recycle.Location.X,
+        //                                                      recycle.Location.Y)
+        //                                          })
+        //                                                .ToList();
+        //    RecycleFullViewModel recycleFullViewModel = new RecycleFullViewModel
+        //    {
+        //        Type = "FeatureCollection",
+        //        Features = recycle_query
+        //    };
+
+        //    return recycleFullViewModel;
+        //}
 
         // POST api/values
         [HttpPost]
         public IActionResult Post(RecycleViewModel recycleViewModel)
         {
-            IGeometry geometry = new Point(recycleViewModel.Latitude, recycleViewModel.Longitude)
+            IGeometry geometry = new Point(recycleViewModel.Longitude, recycleViewModel.Latitude)
             {
                 SRID = recycleViewModel.SRID
             };
@@ -160,7 +163,7 @@ namespace RecycleAPI.Controllers
             };
             _context.Recycles.Add(recycle);
             _context.SaveChanges();
-            return CreatedAtRoute("GetRecycle", new { id = recycle.Id }, recycle);
+            return CreatedAtRoute("getRecycle", new { id = recycle.Id }, recycleViewModel);
         }
 
         // PUT api/values/5

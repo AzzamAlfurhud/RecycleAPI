@@ -23,7 +23,7 @@ namespace RecycleAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.UseNetTopologySuite()));
+                    sqlOptions=>sqlOptions.UseNetTopologySuite()));
 
             services.AddEntityFrameworkSqlServer();
 
