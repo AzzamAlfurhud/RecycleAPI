@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using RecycleAPI.Data;
+using RecycleAPI.Data.Entities;
 using RecycleAPI.ViewModel;
 
 namespace RecycleAPI.Controllers
@@ -111,8 +112,18 @@ namespace RecycleAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(RecycleViewModel recycleViewModel)
         {
+            Recycle recycle = new Recycle
+            {
+                Location = null,
+                CreatedOn = recycleViewModel.CreatedOn,
+                StatusId = recycleViewModel.StatusId,
+                TypeId = recycleViewModel.TypeId
+            };
+            _context.Recycles.Add(recycle);
+            _context.SaveChanges();
+            return CreatedAtRoute("GetRecycle", new { id = recycle.Id }, recycle);
         }
 
         // PUT api/values/5
