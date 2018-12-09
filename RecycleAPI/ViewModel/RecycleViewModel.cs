@@ -6,7 +6,6 @@ namespace RecycleAPI.ViewModel
     {
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public int SRID { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
 
         public TypeEnum TypeId { get; set; }
