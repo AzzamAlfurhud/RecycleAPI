@@ -3,5 +3,6 @@
     Paper,
     Bread,
     Cloth,
+    General,
     Other
 }

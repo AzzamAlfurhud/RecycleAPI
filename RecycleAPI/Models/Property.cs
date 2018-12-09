@@ -7,11 +7,13 @@ namespace RecycleAPI.Models
 {
     public class Property
     {
+        public string RecycleId { get; set; }
         public string RecycleType { get; set; }
         public string RecycleStatus { get; set; }
 
-        public Property(string type, string status)
+        public Property(string id,string type, string status)
         {
+            RecycleId = id;
             RecycleType = type;
             RecycleStatus = status;
         }

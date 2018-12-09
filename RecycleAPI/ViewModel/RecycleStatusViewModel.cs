@@ -6,7 +6,7 @@ namespace RecycleAPI.ViewModel
 {
     public class RecycleStatusViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public double Lat { get; set; }
         public double Long { get; set; }
         public DateTimeOffset CreatedOn { get; set; }

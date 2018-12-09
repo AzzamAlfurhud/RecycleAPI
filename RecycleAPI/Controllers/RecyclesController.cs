@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GeoAPI.Geometries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using RecycleAPI.Data;
 using RecycleAPI.Data.Entities;
@@ -35,6 +37,7 @@ namespace RecycleAPI.Controllers
                              {
                                  Type = "Feature",
                                  Properties = new Models.Property(
+                                         recycle.Id,
                                          type.Name,
                                          status.Name),
                                  Geometry = new Models.MyGeometry(
@@ -44,7 +47,7 @@ namespace RecycleAPI.Controllers
                              })
                          .ToList();
 
-            if (recycle_query[0].Type == null)
+            if (recycle_query.Count() == 0)
             {
                 return NotFound();
             }
@@ -55,7 +58,7 @@ namespace RecycleAPI.Controllers
                 Type = "FeatureCollection",
                 Features = recycle_query
             };
-           
+
             return recycleFullViewModel;
         }
 
@@ -73,6 +76,7 @@ namespace RecycleAPI.Controllers
                                                   {
                                                       Type = "Feature",
                                                       Properties = new Models.Property(
+                                                              recycle.Id,
                                                               type.Name,
                                                               status.Name),
                                                       Geometry = new Models.MyGeometry(
@@ -82,7 +86,7 @@ namespace RecycleAPI.Controllers
                                                   })
                                                         .ToList();
 
-            if (recycle_query == null)
+            if (recycle_query.Count() == 0)
             {
                 return NotFound();
             }
@@ -113,6 +117,7 @@ namespace RecycleAPI.Controllers
                              {
                                  Type = "Feature",
                                  Properties = new Models.Property(
+                                         recycle.Id,
                                          type.Name,
                                          status.Name),
                                  Geometry = new Models.MyGeometry(
@@ -122,7 +127,7 @@ namespace RecycleAPI.Controllers
                              })
                          .ToList();
 
-            if (recycle_query == null)
+            if (recycle_query.Count() == 0)
             {
                 return NotFound();
             }
@@ -153,6 +158,7 @@ namespace RecycleAPI.Controllers
                              {
                                  Type = "Feature",
                                  Properties = new Models.Property(
+                                         recycle.Id,
                                          type.Name,
                                          status.Name),
                                  Geometry = new Models.MyGeometry(
@@ -162,7 +168,7 @@ namespace RecycleAPI.Controllers
                              })
                          .ToList();
 
-            if (recycle_query == null)
+            if (recycle_query.Count() == 0)
             {
                 return NotFound();
             }
@@ -178,7 +184,7 @@ namespace RecycleAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post(RecycleViewModel recycleViewModel)
+        public async Task<IActionResult> PostAsync(RecycleViewModel recycleViewModel)
         {
             IGeometry geometry = new Point(recycleViewModel.Longitude, recycleViewModel.Latitude)
             {
@@ -192,14 +198,26 @@ namespace RecycleAPI.Controllers
                 TypeId = recycleViewModel.TypeId
             };
             _context.Recycles.Add(recycle);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return CreatedAtRoute("getRecycle", new { id = recycle.Id }, recycleViewModel);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutAsync(string id, RecycleViewModel recycleViewModel)
         {
+            if (id != recycleViewModel.Id)
+            {
+                return BadRequest();
+            }
+            Recycle recycle = await _context.Recycles.FindAsync(id);
+
+            recycle.StatusId = recycleViewModel.StatusId;
+            recycle.TypeId = recycleViewModel.TypeId;
+
+            _context.Recycles.Update(recycle);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // DELETE api/values/5
@@ -207,5 +225,6 @@ namespace RecycleAPI.Controllers
         public void Delete(int id)
         {
         }
+
     }
 }
