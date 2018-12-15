@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
@@ -193,7 +194,7 @@ namespace RecycleAPI.Controllers
             Recycle recycle = new Recycle
             {
                 Location = geometry.PointOnSurface,
-                CreatedOn = recycleViewModel.CreatedOn,
+                CreatedOn = DateTime.Now,
                 StatusId = recycleViewModel.StatusId,
                 TypeId = recycleViewModel.TypeId
             };
@@ -204,16 +205,16 @@ namespace RecycleAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(string id, RecycleViewModel recycleViewModel)
+        public async Task<IActionResult> PutAsync(string id, UpdateViewModel updateViewModel)
         {
-            if (id != recycleViewModel.Id)
+            if (id != updateViewModel.Id)
             {
                 return BadRequest();
             }
             Recycle recycle = await _context.Recycles.FindAsync(id);
 
-            recycle.StatusId = recycleViewModel.StatusId;
-            recycle.TypeId = recycleViewModel.TypeId;
+            recycle.StatusId = updateViewModel.StatusId;
+            recycle.TypeId = updateViewModel.TypeId;
 
             _context.Recycles.Update(recycle);
             await _context.SaveChangesAsync();

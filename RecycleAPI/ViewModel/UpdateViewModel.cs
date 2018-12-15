@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RecycleAPI.ViewModel
 {
-    public class RecycleViewModel
+    public class UpdateViewModel
     {
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
-
+        public string Id { get; set; }
         public TypeEnum TypeId { get; set; }
-
         public StatusEnum StatusId { get; set; }
     }
 }
